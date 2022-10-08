@@ -1,0 +1,449 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'richtexteditor/rte_theme_default.css' %}" />
+{% endblock %}
+
+{% block main_content %}
+  
+
+  <main id="main" class="main" style="background:azure">
+
+    
+    <div class="pagetitle">
+      
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active"><a href="{% url 'index_page' %}">Home</a></li>
+          <li class="breadcrumb-item">Users</li>
+          <li class="breadcrumb-item active">Profile</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+      <div class="row">
+        <div class="col-xl-4">
+
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center" style="height:500px;background-color:azure;">
+
+              
+              <!-- <form method="post" action="{% url 'upload_image' %}" enctype="multipart/form-data" onchange="this.submit();">
+                {% csrf_token %}
+                <style>
+                  .img-controls {
+                    position: relative;
+                    background-color: aqua;
+                    width: 150px;
+                    height: 150px;
+                  }
+                  .img-controls .add-image {
+                    position: absolute;
+                    width: 25px;
+                    height: 25px;
+                    left: 0;
+                    right: 0;
+                    bottom: -12px;
+                    margin: auto;
+                    text-align: center;
+                    font-size: large;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                  }
+
+                  .img-controls:hover .add-image {
+                    opacity: 1;
+                  }
+                </style>
+                
+                <div class="img-controls rounded-circle" style="background-image: url(); background-size: cover;">
+                  
+
+                  <label class="add-image bg-primary rounded-circle" for="profile_image">
+                    <i class="bx bx-plus text-light"></i>
+                  </label>
+                </div>
+                <input type="file" name="profile_image" id="profile_image" class="d-none" accept=".jpg,.png" />
+              </form> -->
+              
+              <style>
+                .avatar-block {
+                  position: relative;
+                  transition: all ease-in-out 0.2s;
+                  padding: 0;
+                }
+                .avatar-block input[type="file"] {
+                  display: none;
+                }
+                .avatar-block[uploaded="false"] .remove-btn,
+                .avatar-block[uploaded="false"] .upload-btn {
+                  display: none;
+                }
+                .avatar-block[uploaded="true"] .add-btn {
+                  display: none;
+                }
+                .avatar-block[uploaded="false"] .add-btn {
+                  display: block;
+                  background-color: #08457e;
+                  border: solid 2px #fff;
+                  opacity: 1;
+                  bottom: -10px;
+                  /* transform: scale(0.9); */
+                  left: 0;
+                  right: 0;
+                  width: 25px;
+                  height: 25px;
+                  /* font-size: large; */
+                  margin: auto;
+                  padding: 0;
+                }
+                /* .avatar-block img {
+                  box-shadow: 3px 3px 10px #333;
+                } */
+                /* .avatar-block[uploaded="false"] img {
+                  border-radius: unset !important;
+                } */
+                .avatar-block[uploaded="true"]:hover .add-btn {
+                  transform: scale(1.2)
+                }
+                .avatar-block .add-btn,
+                .avatar-block .remove-btn,
+                .avatar-block .upload-btn {
+                  position: absolute;
+                  bottom: 0;
+                  left: 0;
+                  right: 0;
+                  margin: auto;
+                  width: fit-content;
+                  opacity: 0;
+                  transition: all ease-in-out 0.2s;
+                }
+                .avatar-block:hover .profile-control {
+                  opacity: 1;
+                  margin: auto;
+                }
+                .avatar-block:hover .upload-btn {
+                  /* right: 0 !important; */
+                  transform: translateX(-50px);
+                }
+                .avatar-block:hover .remove-btn {
+                  transform: translateX(50px);
+                }
+                .upload-btn * {
+                  outline: none !important;
+                }
+              </style>
+              <form class="profile-image-form avatar-block"
+                onchange="this.submit()"
+                method="post"
+                action="{% url 'upload_image' %}"
+                uploaded="{% if profile_data.ProfileImage != '' %}true{% else %}false{% endif %}"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <img src="{% if profile_data.ProfileImage != '' %}{{profile_data.ProfileImage.url}}{% else %}{% static 'assets/img/avatar.png' %}{% endif %}" alt="Profile" class="rounded-circle">
+                <a href="{% url 'remove_profile_image' %}" class="profile-control remove-btn btn btn-danger btn-sm rounded-circle" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                <label for="upload-image" class="profile-control upload-btn btn btn-primary btn-sm rounded-circle" title="Upload new profile image"><i class="bi bi-pencil"></i></label>
+                <label for="upload-image" class="profile-control add-btn btn btn-primary btn-sm rounded-circle" title="Upload new profile image"><i class="bi bi-plus"></i></label>
+                <input name="profile_image" type="file" id="upload-image" />
+
+              </form>
+
+             <h2 style="text-transform: capitalize;">{% if profile_data.FullName %}{{profile_data.FullName}}{% else %}Guest{% endif %}</h2>
+              <h3>{{ profile_data.Master.Email }}</h3>
+              <h3>Student</h3>
+              <div class="social-links mt-2">
+                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-xl-8" style="background-color:azure">
+
+          <div class="card" style="background-color:azure">
+            <div class="card-body pt-3" style="background-color:azure">
+              <!-- Bordered Tabs -->
+              <ul class="nav nav-tabs nav-tabs-bordered">
+
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                </li>
+                
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#book-store">Book Store</button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                </li>
+
+              </ul>
+              <div class="tab-content pt-2">
+
+
+                <div class="tab-pane fade show active profile-edit pt-3" id="profile-edit">
+
+                  <!-- <div id="div_editor1">
+                    <p>This is a default toolbar demo of Rich text editor.</p>
+                    <p><img src='/images/editor-image.png' /></p>
+                  </div> -->
+
+                  
+
+                  <!-- Profile Edit Form -->
+                  <form method="post" class="needs-validation" action="{% url 'update_profile' %}" novalidate >
+                    {% csrf_token %}
+                    
+
+                    <div class="row mb-3">
+                      <div class="col-6">
+                        <div class="form-floating">
+                          <input type="text" name="first_name" class="form-control" id="firstName" placeholder="FirstName" value="{{profile_data.FirstName}}" required>
+                          <label for="firstName">First Name</label>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-floating">
+                          <input type="text" name="last_name" class="form-control" id="lastName" placeholder="LastName" value="{{profile_data.LastName}}" required>
+                          <label for="lastName">Last Name</label>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+
+                    <div class="row mb-3">
+                      <fieldset class="col-6 form-floating">
+                        <label style="opacity: .65;
+                        transform: scale(.85) translateY(-.6rem) translateX(.85rem);
+                    ">Gender</label>
+                        <div class="form-control">
+                            {% for gc in gender_choices %}
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="gender" id="gridRadios{{gc.short_text}}" value="{{gc.short_text}}" {% if gc.short_text == profile_data.Gender %}checked{% endif %} required>
+                              <label class="form-check-label" for="gridRadios{{gc.short_text}}">
+                                I'm {{gc.text}}
+                              </label>
+                            </div>
+                            {% endfor %}
+                            <div class="valid-feedback">
+                              Looks good!
+                            </div>
+                          </div>
+                      </fieldset>
+
+                      <div class="col-6">
+                        <div class="form-floating">
+                          <input name="Roll_no" type="text" class="form-control w-auto" id="Roll_no" placeholder="Roll_no" value="{{profile_data.Date_of_birth}}" required>                        <label for="Date_of_joining">Date_of_joining</label>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                    <div class="col-6">
+                      <div class="form-floating">
+                        <input name="Roll_no" type="text" class="form-control w-auto" id="Roll_no" placeholder="Roll_no" value="{{profile_data.Date_of_joining}}" required>                        <label for="Date_of_joining">Date_of_joining</label>
+                        <div class="valid-feedback">
+                          Looks good!
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                <div class="col-6">
+                  <div class="form-floating mb-3">
+                    <input name="Roll_no" type="text" class="form-control w-auto" id="Roll_no" placeholder="Roll_no" value="{{profile_data.Roll_no}}" required>
+                    <label for="Roll_no" class="col-md-4 col-lg-3 col-form-label">Rollno</label>
+                    <div class="valid-feedback">
+                      Looks good!
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+                      <div class="col-6 w-auto">
+                        <div class="form-floating mb-3">
+                          <textarea class="form-control" name="address" style="resize: none; height: 70px;width:300px;" id="floatingTextarea" placeholder="Address">{{profile_data.Address}}</textarea>
+                          <label for="floatingTextarea">Address</label>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+            </div>
+
+                    
+
+            <button type="submit" class="btn btn-primary">
+              Save Changes
+            </button>
+  
+                    </div>
+                  </form><!-- End Profile Edit Form -->
+
+                </div>
+
+                <div class="tab-pane fade pt-3" id="book-store">
+                  <form method="post" class="needs-validation" action="#" novalidate>
+                    {% csrf_token %}
+
+                    <div class="row mb-3">
+                      <div class="col-4">
+                        <div class="form-floating">
+                          <input type="text" name="book_title" class="form-control" id="bookTitle" placeholder="Book Title" required>
+                          <label for="bookTitle">Book Title</label>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="form-floating">
+                          <input type="text" name="isbn_number" class="form-control" id="isbn" placeholder="ISBN" required>
+                          <label for="isbn">ISBN</label>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                      </div>
+                    
+                      
+                      
+                    </div>
+
+                    <div class="row">
+                      
+
+                      <div class="col">
+                        <div class="form-floating mb-3">
+                          <textarea class="form-control" name="content" style="resize: none; height: 205px;" id="content" placeholder="Content"></textarea>
+                          <label for="content">Content</label>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    
+                    <div class="text-center">
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
+                        Save
+                      </button>
+  
+                    </div>
+                  </form>
+                </div>
+
+                <div class="tab-pane fade pt-3" id="profile-settings">
+
+                  <!-- Settings Form -->
+                  <form>
+
+                    <div class="row mb-3">
+                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
+                      <div class="col-md-8 col-lg-9">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="changesMade" checked>
+                          <label class="form-check-label" for="changesMade">
+                            Changes made to your account
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="newProducts" checked>
+                          <label class="form-check-label" for="newProducts">
+                            Information on new products and services
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="proOffers">
+                          <label class="form-check-label" for="proOffers">
+                            Marketing and promo offers
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
+                          <label class="form-check-label" for="securityNotify">
+                            Security alerts
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                  </form><!-- End settings Form -->
+
+                </div>
+
+                <div class="tab-pane fade pt-3" id="profile-change-password">
+                  <!-- Change Password Form -->
+                  <form method="post" action="{% url 'change_password' %}">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                      <div class="col-6">
+                        <div class="form-floating mb-3">
+                          <input name="current_password" type="password" class="form-control" id="current_password" placeholder="Current Password">
+                          <label for="current_password" class="col col-form-label">Current Password</label>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-floating mb-3">
+                          <input name="new_password" type="password" class="form-control" id="new_password" placeholder="New Password">
+                          <label for="new_password" class="col col-form-label">New Password</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary">Change Password</button>
+                    </div>
+                  </form><!-- End Change Password Form -->
+
+              
+            </div>
+              <!-- End Bordered Tabs -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'richtexteditor/rte.js' %}"></script>
+<script type="text/javascript" src="{% static 'richtexteditor/plugins/all_plugins.js' %}"></script>
+
+<script>
+	
+  // var editor1 = new RichTextEditor("#div_editor1");
+	//editor1.setHTMLCode("Use inline HTML or setHTMLCode to init the default content.");
+
+    
+</script>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main_content %}
+  <main>
+    <div class="container">
+
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4" style="background-color:rgb(137, 137, 204)">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+<!-- End Logo -->
+
+              <div class="card mb-3" style="background-color:azure">
+
+                <div class="card-body">
+
+                  <div class="pt-4 pb-2">
+                    <h6 class="card-title text-center pb-0 fs-4"><span strong style="font-size:larger;">Login</span></h6>
+
+                    
+                  </div>
+
+                  <form class="row g-3 needs-validation" method="post" action="{% url 'login' %}" novalidate>
+                    {% csrf_token %}
+                    <div class="col-12">
+                      <label for="email" class="form-label"><h7>Email</h7></label>
+                      <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                        <input type="email" name="email" class="form-control" id="email" required>
+                        <div class="invalid-feedback">Please enter your username.</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourPassword" class="form-label"><h7>Password</h7></label>
+                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <div class="invalid-feedback">Please enter your password!</div>
+                    </div>
+
+                    <div class="col-12">
+                    
+                      <button class="btn btn-primary w-100" type="submit" onclick="Login"><div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div></button>
+    
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0">Don't have account? <a href="{% url 'register_page' %}">Create an account</a></p>
+                    </div>
+                  </form>
+
+                </div>
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main><!-- End #main -->
+{% endblock %}
